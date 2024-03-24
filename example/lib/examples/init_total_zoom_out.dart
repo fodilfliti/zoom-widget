@@ -11,7 +11,9 @@ class InitTotalZoomOut extends StatelessWidget {
         title: Text('Init total zoom'),
       ),
       body: Zoom(
-        initTotalZoomOut: true,
+        initTotalZoomOut: false,
+        initPosition: Offset(100, 100),
+        builder: (BuildContext context, methodFromChild) {},
         child: Center(
           child: FlutterLogo(
             size: 1000,

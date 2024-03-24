@@ -47,6 +47,7 @@ class ZoomeableImageGallery extends StatelessWidget {
             children: List.generate(
                 4,
                 (index) => Zoom(
+                      builder: (BuildContext context, methodFromChild) {},
                       maxScale: 5,
                       maxZoomHeight: 1000,
                       maxZoomWidth: 1000,

@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 
 typedef ZoomWidgetBuilder = Widget Function(
     BuildContext context, Quad viewport);
+typedef GoPositionBuilder = void Function(
+    BuildContext context, void Function(Offset offset) goToPosition);
 
 @immutable
 class Zoom extends StatefulWidget {
@@ -16,6 +18,7 @@ class Zoom extends StatefulWidget {
       this.canvasColor = Colors.white,
       this.centerOnScale = true,
       required this.child,
+      required this.builder,
       this.colorScrollBars = Colors.black12,
       this.doubleTapAnimDuration = const Duration(milliseconds: 300),
       this.doubleTapScaleChange = 1.1,
@@ -42,6 +45,7 @@ class Zoom extends StatefulWidget {
       : assert(maxScale > 0),
         assert(!maxScale.isNaN),
         super(key: key);
+  final GoPositionBuilder builder;
 
   final Color backgroundColor;
   final Color canvasColor;
@@ -941,9 +945,23 @@ class _ZoomState extends State<Zoom>
     });
   }
 
+  void goToPositionFuntion(Offset offset) {
+    setState(() {
+      _transformationController!.value = _matrixTranslate(
+        Matrix4.identity()..scale(1.01),
+        offset,
+      );
+
+      _referenceFocalPoint = _transformationController!.toScene(
+        offset,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget child;
+    widget.builder.call(context, goToPositionFuntion);
     child = _ZoomBuilt(
       childKey: _childKey,
       constrained: false,

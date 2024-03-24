@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/examples/custom_zoom.dart';
-import 'package:mobile/examples/init_total_zoom_out.dart';
-import 'package:mobile/examples/simple_zoom.dart';
-import 'package:mobile/examples/zoomeable_image_gallery.dart';
+import './examples/custom_zoom.dart';
+import './examples/init_total_zoom_out.dart';
+import './examples/simple_zoom.dart';
+import './examples/zoomeable_image_gallery.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);

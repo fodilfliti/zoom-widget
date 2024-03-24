@@ -20,6 +20,7 @@ class _CustomZoomState extends State<CustomZoom> {
         title: Text('Custom zoom'),
       ),
       body: Zoom(
+        builder: (BuildContext context, methodFromChild) {},
         initTotalZoomOut: true,
         backgroundColor: Colors.orange,
         canvasColor: Colors.grey,
