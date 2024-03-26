@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 
 typedef ZoomWidgetBuilder = Widget Function(
     BuildContext context, Quad viewport);
-typedef GoPositionBuilder = void Function(
-    BuildContext context, void Function(Offset offset) goToPosition);
+typedef GoPositionBuilder = void Function(BuildContext context,
+    void Function(Offset offset, double? scale) goToPosition);
 
 @immutable
 class Zoom extends StatefulWidget {
@@ -945,10 +945,10 @@ class _ZoomState extends State<Zoom>
     });
   }
 
-  void goToPositionFuntion(Offset offset) {
+  void goToPositionFuntion(Offset offset, double? scale) {
     setState(() {
       _transformationController!.value = _matrixTranslate(
-        Matrix4.identity()..scale(1.01),
+        Matrix4.identity()..scale((scale ?? 1.0) + 0.01),
         offset,
       );
 

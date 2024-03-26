@@ -3,7 +3,7 @@ import 'package:zoom_widget/zoom_widget.dart';
 
 class SimpleZoom extends StatelessWidget {
   SimpleZoom({Key? key}) : super(key: key);
-  late void Function(Offset offset) myMethod;
+  late void Function(Offset offset, double? scale) myMethod;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class SimpleZoom extends StatelessWidget {
               right: 100,
               child: GestureDetector(
                 onTap: () {
-                  myMethod(Offset(-200, -200));
+                  myMethod(Offset(-200, -200), null);
                 },
                 child: Container(
                   color: Colors.black,
