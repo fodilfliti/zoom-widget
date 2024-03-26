@@ -950,13 +950,10 @@ class _ZoomState extends State<Zoom>
 
   void goToPositionFuntion(Offset offset, double? scale) {
     setState(() {
-      _transformationController!.value = Matrix4.identity()
-        ..scale((1.0) + 0.01);
+      _transformationController!.value =
+          scale != null ? _transformationController!.value : Matrix4.identity()
+            ..scale((1.0) + 0.01);
       if (scale != null) {
-        _transformationController!.value = _matrixScale(
-            _transformationController!.value, scale ?? 0.0,
-            fixScale: true);
-
         _transformationController!.value = _matrixTranslate(
             _transformationController!.value, Offset(-0.01, -0.01),
             fixOffset: true);
