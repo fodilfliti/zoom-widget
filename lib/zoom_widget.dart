@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart';
@@ -8,8 +9,8 @@ import 'package:flutter/material.dart';
 
 typedef ZoomWidgetBuilder = Widget Function(
     BuildContext context, Quad viewport);
-typedef GoPositionBuilder = void Function(BuildContext context,
-    void Function(Offset offset, double? scale) goToPosition);
+typedef GoPositionBuilder = void Function(
+    BuildContext context, void Function(Offset offset) goToPosition);
 
 @immutable
 class Zoom extends StatefulWidget {
@@ -321,7 +322,6 @@ class _ZoomState extends State<Zoom>
     }
 
     final Offset alignedTranslation = translation;
-
     final Matrix4 nextMatrix = matrix.clone()
       ..translate(
         alignedTranslation.dx,
@@ -948,25 +948,21 @@ class _ZoomState extends State<Zoom>
     });
   }
 
-  void goToPositionFuntion(Offset offset, double? scale) {
-    setState(() {
-      _transformationController!.value =
-          scale != null ? _transformationController!.value : Matrix4.identity()
-            ..scale((1.0) + 0.01);
-      if (scale != null) {
-        _transformationController!.value = _matrixTranslate(
-            _transformationController!.value, Offset(-0.01, -0.01),
-            fixOffset: true);
-      }
-      _transformationController!.value = _matrixTranslate(
-        _transformationController!.value,
-        offset,
-      );
-
-      _referenceFocalPoint = _transformationController!.toScene(
-        offset,
-      );
-    });
+  void goToPositionFuntion(Offset offset) {
+    _transformationController!.value.setTranslationRaw(0.0, 0.0, 0.0);
+    _transformationController!.value = _matrixTranslate(
+        _transformationController!.value, Offset(-0.01, -0.01),
+        fixOffset: true);
+    _referenceFocalPoint = _transformationController!.toScene(
+      Offset(-0.01, -0.01),
+    );
+    _referenceFocalPoint = _transformationController!.toScene(
+      offset,
+    );
+    _transformationController!.value = _matrixTranslate(
+      _transformationController!.value,
+      _referenceFocalPoint!,
+    );
   }
 
   @override
