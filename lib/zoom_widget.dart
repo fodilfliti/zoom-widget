@@ -9,8 +9,10 @@ import 'package:flutter/material.dart';
 
 typedef ZoomWidgetBuilder = Widget Function(
     BuildContext context, Quad viewport);
-typedef GoPositionBuilder = void Function(BuildContext context,
-    void Function(Offset offset, {bool forceInitZoom}) goToPosition);
+typedef GoPositionBuilder = void Function(
+    BuildContext context,
+    void Function(Offset offset, {bool forceInitZoom, double? scale})
+        goToPosition);
 
 @immutable
 class Zoom extends StatefulWidget {
@@ -19,7 +21,7 @@ class Zoom extends StatefulWidget {
       this.canvasColor = Colors.white,
       this.centerOnScale = true,
       required this.child,
-      required this.builder,
+      this.builder,
       this.colorScrollBars = Colors.black12,
       this.doubleTapAnimDuration = const Duration(milliseconds: 300),
       this.doubleTapScaleChange = 1.1,
@@ -46,7 +48,7 @@ class Zoom extends StatefulWidget {
       : assert(maxScale > 0),
         assert(!maxScale.isNaN),
         super(key: key);
-  final GoPositionBuilder builder;
+  final GoPositionBuilder? builder;
 
   final Color backgroundColor;
   final Color canvasColor;
@@ -948,10 +950,12 @@ class _ZoomState extends State<Zoom>
     });
   }
 
-  void goToPositionFuntion(Offset offset, {bool forceInitZoom = false}) {
+  void goToPositionFuntion(Offset offset,
+      {bool forceInitZoom = false, double? scale}) {
     if (forceInitZoom) {
       _transformationController!.value = Matrix4.identity()..scale(1.001);
     }
+
     _transformationController!.value.setTranslationRaw(0.0, 0.0, 0.0);
     _transformationController!.value = _matrixTranslate(
         _transformationController!.value, Offset(-0.01, -0.01),
@@ -959,19 +963,22 @@ class _ZoomState extends State<Zoom>
     _referenceFocalPoint = _transformationController!.toScene(
       Offset(-0.01, -0.01),
     );
+    if (scale != null) {
+      fixScale(scale);
+    }
     _referenceFocalPoint = _transformationController!.toScene(
       offset,
     );
     _transformationController!.value = _matrixTranslate(
       _transformationController!.value,
-      _referenceFocalPoint!,
+      scale != null ? offset : _referenceFocalPoint!,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     Widget child;
-    widget.builder.call(context, goToPositionFuntion);
+    widget.builder?.call(context, goToPositionFuntion);
     child = _ZoomBuilt(
       childKey: _childKey,
       constrained: false,

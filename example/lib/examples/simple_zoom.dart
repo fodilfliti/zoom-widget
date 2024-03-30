@@ -11,7 +11,8 @@ class SimpleZoom extends StatefulWidget {
 }
 
 class _SimpleZoomState extends State<SimpleZoom> {
-  late void Function(Offset offset, {bool forceInitZoom}) myMethod;
+  late void Function(Offset offset, {bool forceInitZoom, double? scale})
+      myMethod;
   double x = 0;
   double y = 0;
 
@@ -48,11 +49,12 @@ class _SimpleZoomState extends State<SimpleZoom> {
               child: GestureDetector(
                 onTap: () {
                   myMethod(
-                      Offset(
-                        -200,
-                        -200,
-                      ),
-                      forceInitZoom: true);
+                    Offset(
+                      -1420,
+                      -1420,
+                    ),
+                    //forceInitZoom: true,
+                  );
                 },
                 child: Container(
                   color: Colors.black,
