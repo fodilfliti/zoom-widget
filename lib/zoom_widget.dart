@@ -11,7 +11,8 @@ typedef ZoomWidgetBuilder = Widget Function(
     BuildContext context, Quad viewport);
 typedef GoPositionBuilder = void Function(
     BuildContext context,
-    void Function(Offset offset, {bool forceInitZoom, double? scale})
+    void Function(Offset offset,
+            {bool forceInitZoom, double? scale, bool? useReferenceFocalPoint})
         goToPosition);
 
 @immutable
@@ -951,7 +952,9 @@ class _ZoomState extends State<Zoom>
   }
 
   void goToPositionFuntion(Offset offset,
-      {bool forceInitZoom = false, double? scale}) {
+      {bool forceInitZoom = false,
+      double? scale,
+      bool? useReferenceFocalPoint = false}) {
     if (forceInitZoom) {
       _transformationController!.value = Matrix4.identity()..scale(1.001);
     }
@@ -971,7 +974,9 @@ class _ZoomState extends State<Zoom>
     );
     _transformationController!.value = _matrixTranslate(
       _transformationController!.value,
-      scale != null ? offset : _referenceFocalPoint!,
+      scale != null && !useReferenceFocalPoint!
+          ? offset
+          : _referenceFocalPoint!,
     );
   }
 
