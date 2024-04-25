@@ -974,7 +974,8 @@ class _ZoomState extends State<Zoom>
     );
     _transformationController!.value = _matrixTranslate(
       _transformationController!.value,
-      scale != null && !useReferenceFocalPoint!
+     // scale != null && 
+        !useReferenceFocalPoint!
           ? offset
           : _referenceFocalPoint!,
     );
