@@ -12,7 +12,10 @@ typedef ZoomWidgetBuilder = Widget Function(
 typedef GoPositionBuilder = void Function(
     BuildContext context,
     void Function(Offset offset,
-            {bool forceInitZoom, double? scale, bool? useReferenceFocalPoint})
+            {bool forceInitZoom,
+            double? scale,
+            bool? useReferenceFocalPoint,
+            bool? skipInit})
         goToPosition);
 
 @immutable
@@ -954,30 +957,31 @@ class _ZoomState extends State<Zoom>
   void goToPositionFuntion(Offset offset,
       {bool forceInitZoom = false,
       double? scale,
-      bool? useReferenceFocalPoint = false}) {
-    if (forceInitZoom) {
-      _transformationController!.value = Matrix4.identity()..scale(1.001);
-    }
+      bool? useReferenceFocalPoint = false,
+      bool? skipInit = false}) {
+    if (!skipInit!) {
+      if (forceInitZoom) {
+        _transformationController!.value = Matrix4.identity()..scale(1.001);
+      }
 
-    _transformationController!.value.setTranslationRaw(0.0, 0.0, 0.0);
-    _transformationController!.value = _matrixTranslate(
-        _transformationController!.value, Offset(-0.01, -0.01),
-        fixOffset: true);
-    _referenceFocalPoint = _transformationController!.toScene(
-      Offset(-0.01, -0.01),
-    );
-    if (scale != null) {
-      fixScale(scale);
+      _transformationController!.value.setTranslationRaw(0.0, 0.0, 0.0);
+      _transformationController!.value = _matrixTranslate(
+          _transformationController!.value, Offset(-0.01, -0.01),
+          fixOffset: true);
+      _referenceFocalPoint = _transformationController!.toScene(
+        Offset(-0.01, -0.01),
+      );
+      if (scale != null) {
+        fixScale(scale);
+      }
     }
     _referenceFocalPoint = _transformationController!.toScene(
       offset,
     );
     _transformationController!.value = _matrixTranslate(
       _transformationController!.value,
-     // scale != null && 
-        !useReferenceFocalPoint!
-          ? offset
-          : _referenceFocalPoint!,
+      // scale != null &&
+      !useReferenceFocalPoint! ? offset : _referenceFocalPoint!,
     );
   }
 
