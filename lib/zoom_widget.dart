@@ -1061,8 +1061,7 @@ class _ZoomState extends State<Zoom>
                                 return scrollData.length == 0
                                     ? Container()
                                     : Positioned(
-                                        top: parentSize.height -
-                                            widget.scrollWeight,
+                                        bottom: 10,
                                         left: scrollData.position,
                                         child: Container(
                                           decoration: BoxDecoration(
